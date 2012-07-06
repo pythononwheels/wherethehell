@@ -5,12 +5,19 @@
 # and number of instances of file-type-x (e.g. .jpg, .pdf and so on) 
 # as bar-chart  or pie-chart  
 # All reports are generated as stand alone html files so 
-# using google chart tools.
-#
+# using google chart tools AND smart_chart.
+# Smart_chart produces the google-charts automatically from csv files. 
+# 
+# OK, I admit that smart_chart is also made by me ;) But for a different use
+# so now nice reuse option. 
+# 
 # Date:     06.07.2012. (My wifes birthday;)
 # Author:   khz@tzi.org
 # Github:   https://github.com/pythononwheels/wherethehell
-#
+# uses:     python                  www.python.org
+#           google-chart-tools      https://developers.google.com/chart/
+#           smart_chart             https://github.com/pythononwheels/smart_chart
+        
 
 from optparse import OptionParser
 import sys, os, datetime
@@ -31,16 +38,25 @@ def analyze(dir, out_file = "./out.csv"):
     total_dirs = 0
     # format olist = [ [inner_olist1],[inner_olist2]...[inner_olistn] ]
     olist = []
-    # format inner_olist = [ path, size, [ (ext1, numfiles, siez), (ext2, numfiles, size) ] ]
+    # format inner_olist = [ path, size, [ (ext1, numfiles, size), (ext2, numfiles, size) ] ]
     inner_olist = []
     
     for path,dirs,files in os.walk(os.path.normpath(dir)):
         #print path
         #print dirs
         total_dirs += len(dirs)
-        #print files
+        print path, files
         total_files += len(files)
-        
+        current_total_size = 0
+        current_dict = {}
+        for afile in files:
+            absfile = os.path.abspath(os.path.normpath(os.path.join(path, afile)))
+            if os.path.exists(os.path.normpath(absfile)):
+                filename,ext = os.path.splitext(absfile)
+                size = os.path.getsize(os.path.normpath(absfile))
+                print filename, ext, " --> ", size, "Byte.  kB: ", str(size/1024)
+            else:
+                print "...does not exists ", afile, os.path.normpath(absfile)
     
     ofile = open(os.path.normpath(out_file), "w")
     ofile.close()
