@@ -9,8 +9,9 @@
 #
 # Date:     06.07.2012. (My wifes birthday;)
 # Author:   khz@tzi.org
-# Github:   See 
+# Github:   https://github.com/pythononwheels/wherethehell
 #
+
 from optparse import OptionParser
 import sys, os, datetime
 
@@ -28,6 +29,10 @@ def analyze(dir, out_file = "./out.csv"):
     """
     total_files = 0
     total_dirs = 0
+    # format olist = [ [inner_olist1],[inner_olist2]...[inner_olistn] ]
+    olist = []
+    # format inner_olist = [ path, size, [ (ext1, numfiles, siez), (ext2, numfiles, size) ] ]
+    inner_olist = []
     
     for path,dirs,files in os.walk(os.path.normpath(dir)):
         #print path
@@ -50,8 +55,6 @@ if __name__ == "__main__":
         help="base dir for tree walk analysis", default ="./")
     #parser.add_option("-f", "--force",  action="store_true",  dest="force", 
     #    help="forces overrides of existing app", default="False")
-    #parser.add_option("-c", "--comment",  action="store", type="string", dest="comment", 
-    #    help="defines a comment for this migration.", default ="No Comment")
 
 
     (options, args) = parser.parse_args()
